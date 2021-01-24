@@ -1,55 +1,52 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import UserInput from './UserInput/UserInput';
-import UserOutput from './UserOutput/UserOutput';
+import Validation from './Validation/Validation';
+import Char from './Char/Char';
+
 
 class App extends Component {
   state = {
-    username: 'daniel from state'
-  }
-  
-
-  usernameChangedHandler = (event) => {
-    this.setState({username: event.target.value});
+    userInput: ''
 
   }
+
+  inputChangeHandler = (event) => {
+    this.setState({userInput: event.target.value});
+  }
   
+  deleteCharHandler = (index) => {
+    const text = this.state.userInput.split('');
+    text.splice(index,1);
+    const updatedText = text.join('');
+    this.setState({userInput: updatedText});
+  }
+
   render() {
+    const charList = this.state.userInput.split('').map((ch, index) => {
+      return <Char character={ch} key={index}
+      clicked = {() => this.deleteCharHandler(index)}  />;
+    })
+
     return (
       <div className="App">
          <ol>
-          <li>Create TWO new components: UserInput and UserOutput</li>
-          {/* /* folders created */}
-          <li>UserInput should hold an input element, UserOutput two paragraphs</li>
-          {/* input and 2 p tag is created */}
-          <li>Output multiple UserOutput components in the App component (any paragraph texts of your choice)</li>
-          {/* app.js de created tags are imported */}
-          <li>Pass a username (of your choice) to UserOutput via props and display it there</li>
-          {/* userName="Daniel" passed as props */}
-          <li>Add state to the App component (=> the username) and pass the username to the UserOutput component</li>
-          {/* state are just properties of class, so state in app file */}
-          <li>Add a method to manipulate the state (=> an event-handler method)</li>
-          {/* usernameChangedHandler() added to solve */}
-          <li>Pass the event-handler method reference to the UserInput component and bind it to the input-change event</li>
-          {/* usernameChangedHandler passed input tag via props*/}
-          <li>Ensure that the new input entered by the user overwrites the old username passed to UserOutput</li>
-          {/* completed by doing previous one, setState has do it */}
-          <li>Add two-way-binding to your input (in UserInput) to also display the starting username</li>
-          {/* value is added to userinput.js and 2nd input added to app.js*/}
-          <li>Add styling of your choice to your components/ elements in the components - both with inline styles and stylesheets</li>
-          {/* inline style will written for input.js */}
-          {/*  adding css file for output style*/}
-        </ol>
-        <UserInput 
-        changed = {this.usernameChangedHandler}/>
-        <UserInput 
-        changed = {this.usernameChangedHandler}
-        currentName={this.state.username}/>
-        <UserOutput userName="Daniel" />
-        <UserOutput userName="Daniel" />
-        <UserOutput userName={this.state.username} />
+          <li>Create an input field (in App component) with a change listener which outputs the length of the entered text below it (e.g. in a paragraph).</li>
+          {/* this.state.userInput added */}
+          <li>Create a new component (=> ValidationComponent) which receives the text length as a prop</li>
 
+          <li>Inside the ValidationComponent, either output "Text too short" or "Text long enough" depending on the text length (e.g. take 5 as a minimum length)</li>
+          <li>Create another component (=> CharComponent) and style it as an inline box (=> display: inline-block, padding: 16px, text-align: center, margin: 16px, border: 1px solid black).</li>
+          <li>Render a list of CharComponents where each CharComponent receives a different letter of the entered text (in the initial input field) as a prop.</li>
+          <li>When you click a CharComponent, it should be removed from the entered text.</li>
+        </ol>
+        <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
+        <hr />
+        <input type="text" 
+        onChange={this,this.inputChangeHandler}
+        value={this.state.userInput} />
+        <p>{this.state.userInput}</p>
+        <Validation inputLength={this.state.userInput.length} />
+        {charList}
       </div>
     );
   }
